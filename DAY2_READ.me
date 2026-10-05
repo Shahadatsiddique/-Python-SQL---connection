@@ -1,0 +1,274 @@
+# Python + MySQL — Day 2
+
+## Library Management System — Database Logic
+
+Day 2 focused on moving from basic Python-MySQL operations to building meaningful database logic for a Library Management System.
+
+The goal was to understand how multiple related tables work together and how Python can perform real library operations such as issuing and returning books.
+
+---
+
+## 🎯 Goal
+
+The main goal of Day 2 was to understand:
+
+* Relationships between multiple MySQL tables
+* Issue and return book workflows
+* SQL JOINs
+* Transactions
+* `commit()` and `rollback()`
+* Reusable Python functions
+* Working with single and multiple database records
+* Proper database connection handling
+
+---
+
+## 🗄️ Database Structure
+
+The Library Management System contains four main tables:
+
+* `books`
+* `members`
+* `issued_books`
+* `fines`
+
+Important relationships:
+
+```text
+books
+   │
+   │ book_id
+   ↓
+issued_books
+   │
+   │ member_id
+   ↓
+members
+
+issued_books
+   │
+   │ issue_id
+   ↓
+fines
+```
+
+These relationships allow the application to connect books, members, issued records, and fines.
+
+---
+
+## 📚 What I Implemented
+
+### 1. Issue Book Workflow
+
+Implemented the basic process of issuing a book:
+
+```text
+Check Book
+    ↓
+Create Issue Record
+    ↓
+Decrease Available Copies
+    ↓
+Commit Changes
+```
+
+---
+
+### 2. Return Book Workflow
+
+Implemented the return process:
+
+```text
+Find Issue
+    ↓
+Update Return Date
+    ↓
+Increase Available Copies
+    ↓
+Commit Changes
+```
+
+---
+
+### 3. Transactions
+
+Practiced MySQL transaction handling using:
+
+```python
+connection.start_transaction()
+connection.commit()
+connection.rollback()
+```
+
+Understanding:
+
+* `start_transaction()` → starts a transaction
+* `commit()` → permanently saves changes
+* `rollback()` → undoes uncommitted changes
+
+Transactions are useful when multiple database operations should succeed together.
+
+---
+
+## 🔗 SQL JOINs
+
+Practiced combining related information from multiple tables.
+
+Example:
+
+```sql
+SELECT
+    issued_books.issue_id,
+    books.title,
+    members.name,
+    issued_books.issue_date
+FROM issued_books
+JOIN books
+    ON issued_books.book_id = books.book_id
+JOIN members
+    ON issued_books.member_id = members.member_id
+WHERE issued_books.return_date IS NULL;
+```
+
+This query combines:
+
+```text
+issued_books → books → members
+```
+
+and retrieves currently active book issues.
+
+---
+
+## 🔎 `IS NULL`
+
+Learned that SQL uses:
+
+```sql
+IS NULL
+```
+
+instead of:
+
+```sql
+= NULL
+```
+
+For example:
+
+```sql
+WHERE return_date IS NULL
+```
+
+is used to find books that have not yet been returned.
+
+---
+
+## 🧩 Python Functions
+
+Started organizing database operations into reusable functions:
+
+```python
+get_book(book_id)
+get_member(member_id)
+get_active_issues()
+close_connection()
+```
+
+This makes the code more organized and reusable instead of keeping all database logic in one large block.
+
+---
+
+## 📌 `fetchone()` vs `fetchall()`
+
+### `fetchone()`
+
+Used when we expect a single record:
+
+```python
+book = cursor.fetchone()
+```
+
+### `fetchall()`
+
+Used when we need multiple records:
+
+```python
+issues = cursor.fetchall()
+```
+
+---
+
+## 🧪 Testing
+
+I tested:
+
+* Existing book search
+* Non-existing book search
+* Existing member search
+* Non-existing member search
+* Active issue listing
+* Book issue workflow
+* Book return workflow
+* Transaction commit
+* Transaction rollback
+* JOIN queries
+* Database connection closing
+
+---
+
+## 🧠 Key Learnings
+
+### JOINs
+
+JOINs allow related data from multiple tables to be combined into one query.
+
+### Transactions
+
+Transactions help keep related database operations consistent.
+
+### `commit()`
+
+Saves the changes made during a transaction.
+
+### `rollback()`
+
+Undo uncommitted changes when something goes wrong.
+
+### Functions
+
+Functions make database operations reusable and improve code organization.
+
+---
+
+## 🔜 Next — Day 3
+
+Day 3 will continue improving the **Library Management System** rather than starting a completely different project.
+
+The focus will be on building more complete application functionality and making the existing database operations more structured and practical.
+
+The overall direction is:
+
+```text
+Day 1
+Python ↔ MySQL Fundamentals
+        ↓
+Day 2
+Database Logic + Relationships
+        ↓
+Day 3–5
+Improve Library Management System
+        ↓
+Day 6–12
+Advanced SQL
+```
+
+---
+
+## 🎯 Day 2 Status
+
+**Day 2 — COMPLETED ✅**
+
+Today I moved from simply executing SQL queries to understanding how Python, MySQL relationships, JOINs, transactions, and functions work together to build a database-backed application.
+
+**Learning → Practicing → Building → Improving**
