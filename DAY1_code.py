@@ -5,7 +5,7 @@ print("MySQL connector imported successfully")
 connection = mysql.connector.connect(
     host="127.0.0.1",
     user="root",
-    password="Imran@_786",
+    password="YOUR PASSWORD",
     database="library"
 )
 
