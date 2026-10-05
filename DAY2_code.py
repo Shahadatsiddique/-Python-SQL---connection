@@ -3,7 +3,7 @@ import mysql.connector
 connection=mysql.connector.connect(
     host="127.0.0.1",
         user="root",
-        password="Password",
+        password="YOUR PASSWORD",
         database="library"
 )
 print("Connected to Library database successfully!")
@@ -94,24 +94,22 @@ today = date.today()
 
 
 #inserting data
-insert issue
 cursor.execute("""
     INSERT INTO issued_books
     (issue_id, book_id, member_id, issue_date, return_date)
     VALUES (%s, %s, %s, %s, %s)
-""", (1006, 3, 101, today, None))
+""", (1007, 3, 101, today, None))
 connection.commit()
 
 
 #verifying all details through single data
-verify
 cursor.execute("""
     SELECT *
     FROM issued_books
-    WHERE issue_id = 1006
+    WHERE issue_id = 1007
 """)
 issue = cursor.fetchone()
-print("Issue 1006:", issue)
+print("Issue 1007:", issue)
 
 
 #update data while desceasing value
@@ -153,7 +151,7 @@ cursor.execute("""
     UPDATE issued_books
     SET return_date = %s
     WHERE issue_id = %s
-""", (return_date, 1006))
+""", (return_date, 1007))
 connection.commit()
 print("Return date updated.")
 
@@ -307,19 +305,9 @@ def get_active_issues():
     issues = cursor.fetchall()
     return issues
 
-issues = get_active_issues()
-for issue in issues:
-    print(issue)
-
 
 
 def close_connection():
     cursor.close()
     connection.close()
     print("Database connection closed.")
-close_connection()
-
-
-book = get_book(3)
-
-print("Current book:", book)
