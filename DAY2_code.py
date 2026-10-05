@@ -16,34 +16,37 @@ for table in cursor:
     print(table)
 
 
-#describe one table
+#describe column name of books table
 cursor.execute("describe books")
 for columns in cursor:
     print(columns)
 
 
-#describing other table
+#describing column name
 cursor.execute("DESCRIBE issued_books")
 for column in cursor:
     print(column)
 
 
-#describing another book
+#describing column name
 cursor.execute("DESCRIBE fines")
 for column in cursor:
     print(column)
 
 
+#describing all data of members table
 cursor.execute("SELECT * FROM members")
 for row in cursor:
     print(row)
 
 
+#describing all data
 cursor.execute("SELECT * FROM issued_books")
 for row in cursor:
     print(row)
 
 
+#extract only needed data
 cursor.execute("""
     SELECT book_id, title, available_copies
     FROM books
@@ -52,16 +55,19 @@ for row in cursor:
     print(row)
 
 
+#describing all data
 cursor.execute("SELECT * FROM fines")
 for row in cursor:
     print(row)
 
 
+#fetchone()-> one data from issued_books table
 cursor.execute("SELECT MAX(issue_id) FROM issued_books")
 result = cursor.fetchone()
 print("Highest issue ID:", result[0])
 
 
+#fetchone(from member table with matching condition)
 cursor.execute("""
     SELECT member_id, name
     FROM members
@@ -71,6 +77,7 @@ member = cursor.fetchone()
 print("Member:", member)
 
 
+#fetchone(from books table with matching condition)
 cursor.execute("""
     SELECT book_id, title, available_copies
     FROM books
@@ -80,12 +87,13 @@ book = cursor.fetchone()
 print("Book:", book)
 
 
-
+#importing date for today's date
 from datetime import date
 today = date.today()
 # print("Today's date:", today)
 
 
+#inserting data
 insert issue
 cursor.execute("""
     INSERT INTO issued_books
@@ -94,6 +102,8 @@ cursor.execute("""
 """, (1006, 3, 101, today, None))
 connection.commit()
 
+
+#verifying all details through single data
 verify
 cursor.execute("""
     SELECT *
@@ -104,15 +114,7 @@ issue = cursor.fetchone()
 print("Issue 1006:", issue)
 
 
-cursor.execute("""
-    SELECT book_id, title, available_copies
-    FROM books
-    WHERE book_id = %s
-""", (3,))
-book = cursor.fetchone()
-print("Current book:", book)
-
-
+#update data while desceasing value
 cursor.execute("""
     UPDATE books
     SET available_copies = available_copies - 1
@@ -121,6 +123,8 @@ cursor.execute("""
 connection.commit()
 print("Book availability updated.")
 
+
+#update data through set data value directly
 cursor.execute("""
     UPDATE books
     SET available_copies = 3
@@ -130,6 +134,7 @@ connection.commit()
 print("Book availability corrected.")
 
 
+#showing details after updation
 cursor.execute("""
     SELECT book_id, title, available_copies
     FROM books
@@ -138,14 +143,6 @@ cursor.execute("""
 book = cursor.fetchone()
 print("Updated book:", book)
 
-
-cursor.execute("""
-    SELECT issue_id, book_id, member_id, issue_date, return_date
-    FROM issued_books
-    WHERE issue_id = %s
-""", (1006,))
-issue = cursor.fetchone()
-print("Issue:", issue)
 
 
 return_date = date.today()
@@ -194,7 +191,7 @@ connection.commit()
 print("Transaction committed.")
 
 
-
+#joins
 cursor.execute("""
     SELECT
         issued_books.issue_id,
@@ -256,7 +253,7 @@ into separate functions.
 
 
 
-
+#functions
 def get_book(book_id):
     cursor.execute("""
         SELECT book_id, title, author, available_copies
